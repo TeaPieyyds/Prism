@@ -1,0 +1,597 @@
+/* ============================================================
+ * Liquid Glass — Apple 风格液态玻璃主题覆盖层
+ * 在 themes.css / app.css 之后引入，通过覆盖设计令牌与关键表面
+ * 实现：动态极光背景 + 毛玻璃拟态 + 镜面高光 + 丝滑弹簧动效
+ * ============================================================ */
+
+/* ── 1. 设计令牌（Light） ── */
+html[data-style="glass"] {
+  /* 主色：iOS 蓝 */
+  --phx-primary: #0a84ff;
+  --phx-primary-hover: #0077ed;
+  --phx-primary-active: #0064c8;
+  --phx-primary-bg: rgba(10, 132, 255, 0.12);
+
+  --phx-success: #34c759;
+  --phx-success-hover: #4ed174;
+  --phx-warning: #ff9f0a;
+  --phx-warning-hover: #ffb340;
+  --phx-error: #ff3b30;
+  --phx-error-hover: #ff6b5e;
+
+  --phx-text: #1c1c1e;
+  --phx-text-secondary: #6e6e73;
+  --phx-text-disabled: #aeaeb2;
+  --phx-border: rgba(60, 60, 67, 0.26);
+  --phx-border-hover: rgba(60, 60, 67, 0.44);
+  --phx-border-light: rgba(60, 60, 67, 0.12);
+
+  --phx-bg: #eef1f7;
+  --phx-bg-secondary: #e5eaf3;
+  --phx-bg-card: rgba(255, 255, 255, 0.52);
+  --phx-bg-dark: #1c1c1e;
+
+  /* 液态玻璃专用令牌 */
+  --lg-glass: rgba(255, 255, 255, 0.5);
+  --lg-glass-strong: rgba(255, 255, 255, 0.72);
+  --lg-glass-soft: rgba(255, 255, 255, 0.3);
+  --lg-glass-border: rgba(255, 255, 255, 0.66);
+  --lg-glass-border-soft: rgba(255, 255, 255, 0.38);
+  --lg-specular: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.16) 32%,
+      rgba(255, 255, 255, 0.02) 62%,
+      rgba(255, 255, 255, 0.26) 100%);
+  --lg-blur: 12px;
+  --lg-blur-strong: 16px;
+
+  /* 更圆润、更柔和 */
+  --phx-radius-sm: 14px;
+  --phx-radius-base: 20px;
+  --phx-radius-lg: 28px;
+
+  --phx-shadow-sm: 0 1px 2px rgba(20, 24, 33, 0.05), 0 4px 10px rgba(20, 24, 33, 0.06);
+  --phx-shadow-base: 0 2px 6px rgba(20, 24, 33, 0.06), 0 14px 30px rgba(20, 24, 33, 0.1);
+  --phx-shadow-lg: 0 8px 24px rgba(20, 24, 33, 0.1), 0 34px 68px rgba(20, 24, 33, 0.16);
+
+  --phx-motion-fast: 0.18s;
+  --phx-motion-base: 0.32s;
+  --phx-motion-slow: 0.6s;
+  --phx-ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── 2. 设计令牌（Dark） ── */
+html[data-style="glass"][data-theme="dark"] {
+  --phx-primary: #409cff;
+  --phx-primary-hover: #6ab3ff;
+  --phx-primary-active: #0a84ff;
+  --phx-primary-bg: rgba(64, 156, 255, 0.16);
+
+  --phx-success: #30d158;
+  --phx-success-hover: #66d989;
+  --phx-warning: #ffd60a;
+  --phx-warning-hover: #ffe14d;
+  --phx-error: #ff453a;
+  --phx-error-hover: #ff7a6e;
+
+  --phx-text: #f5f5f7;
+  --phx-text-secondary: #98989d;
+  --phx-text-disabled: #636366;
+  --phx-border: rgba(255, 255, 255, 0.2);
+  --phx-border-hover: rgba(255, 255, 255, 0.4);
+  --phx-border-light: rgba(255, 255, 255, 0.1);
+
+  --phx-bg: #0b0b0f;
+  --phx-bg-secondary: #131318;
+  /* 烟熏玻璃：深色底偏实但保留透光，白字清晰 + 镜面高光 */
+  --phx-bg-card: rgba(22, 22, 26, 0.6);
+  --phx-bg-dark: #f5f5f7;
+
+  --lg-glass: rgba(22, 22, 26, 0.6);
+  --lg-glass-strong: rgba(26, 26, 30, 0.72);
+  --lg-glass-soft: rgba(22, 22, 26, 0.42);
+  --lg-glass-border: rgba(255, 255, 255, 0.18);
+  --lg-glass-border-soft: rgba(255, 255, 255, 0.1);
+  --lg-specular: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.04) 32%,
+      rgba(255, 255, 255, 0) 62%,
+      rgba(255, 255, 255, 0.07) 100%);
+
+  --phx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --phx-shadow-base: 0 2px 6px rgba(0, 0, 0, 0.35), 0 14px 30px rgba(0, 0, 0, 0.45);
+  --phx-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4), 0 34px 68px rgba(0, 0, 0, 0.55);
+}
+
+/* ── 3. 画布与动态极光背景 ── */
+html[data-style="glass"] { height: 100%; }
+html[data-style="glass"] body {
+  background: var(--phx-bg);
+  color: var(--phx-text);
+  min-height: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html[data-style="glass"] body::before,
+html[data-style="glass"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* 极光光斑（缓慢漂移） */
+html[data-style="glass"] body::before {
+  z-index: -2;
+  background:
+    radial-gradient(42% 38% at 16% 20%, rgba(10, 132, 255, 0.36), transparent 70%),
+    radial-gradient(38% 40% at 82% 10%, rgba(124, 58, 237, 0.32), transparent 70%),
+    radial-gradient(46% 44% at 80% 88%, rgba(34, 211, 238, 0.28), transparent 72%),
+    radial-gradient(40% 40% at 10% 90%, rgba(255, 80, 128, 0.2), transparent 72%);
+  filter: blur(12px) saturate(1.3);
+  transform: translateZ(0) scale(1.15);
+  /* 流霞红蓝流光：缓慢旋转 + 漂移。时长由 JS 随机设为 --lg-aurora-dur，
+     每次加载/切换都不一样的旋转速度，实现"随机旋转移动"。这是慢速 transform，
+     不会像波纹那样逐帧重绘整屏，成本很低。 */
+  animation: lg-aurora-spin var(--lg-aurora-dur, 36s) linear infinite;
+}
+
+html[data-style="glass"][data-theme="dark"] body::before {
+  background:
+    radial-gradient(42% 38% at 16% 20%, rgba(10, 132, 255, 0.5), transparent 70%),
+    radial-gradient(38% 40% at 82% 10%, rgba(124, 58, 237, 0.46), transparent 70%),
+    radial-gradient(46% 44% at 80% 88%, rgba(0, 190, 255, 0.4), transparent 72%),
+    radial-gradient(40% 40% at 10% 90%, rgba(255, 45, 85, 0.36), transparent 72%);
+  filter: blur(24px) saturate(1.5);
+  opacity: 0.82;
+}
+
+/* 细腻颗粒（拟态质感） */
+html[data-style="glass"] body::after {
+  z-index: -1;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+  mix-blend-mode: overlay;
+}
+
+@keyframes lg-aurora-spin {
+  0%   { transform: translateZ(0) scale(1.15) rotate(0deg) translate3d(0, 0, 0); }
+  25%  { transform: translateZ(0) scale(1.18) rotate(90deg) translate3d(-1.5%, 1.2%, 0); }
+  50%  { transform: translateZ(0) scale(1.16) rotate(180deg) translate3d(1.5%, -1%, 0); }
+  75%  { transform: translateZ(0) scale(1.18) rotate(270deg) translate3d(-1%, 1.5%, 0); }
+  100% { transform: translateZ(0) scale(1.15) rotate(360deg) translate3d(0, 0, 0); }
+}
+
+/* ── 4. 玻璃表面 ── */
+html[data-style="glass"] .card,
+html[data-style="glass"] .account-card,
+html[data-style="glass"] .game-card,
+html[data-style="glass"] .admin-card,
+html[data-style="glass"] .settings-card,
+html[data-style="glass"] .auth-card,
+html[data-style="glass"] .hero-panel,
+html[data-style="glass"] .active-snapshot,
+html[data-style="glass"] .mini-panel,
+html[data-style="glass"] .activity-block,
+html[data-style="glass"] .add-panel,
+html[data-style="glass"] .edit-drawer,
+html[data-style="glass"] .token-selector,
+html[data-style="glass"] .tab-strip,
+html[data-style="glass"] .modal-content {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass);
+  /* 性能：卡片不做逐卡 backdrop-filter。背景极光已由 body::before 统一模糊，
+     半透明卡片叠加其上即得到毛玻璃观感；否则每张卡片每帧都要重算模糊，卡片一多就卡。 */
+  border: 1px solid var(--lg-glass-border);
+  box-shadow: var(--phx-shadow-base);
+}
+
+/* 卡片等核心表面：更通透 + 悬停浮起 */
+html[data-style="glass"] .card,
+html[data-style="glass"] .account-card,
+html[data-style="glass"] .game-card,
+html[data-style="glass"] .admin-card,
+html[data-style="glass"] .settings-card {
+  border-radius: var(--phx-radius-lg);
+  transition:
+    transform 0.35s var(--phx-ease-spring),
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+  /* box-shadow 不动画：消除悬停时逐帧重绘开销 */
+}
+
+@media (hover: hover) {
+html[data-style="glass"] .card:hover,
+html[data-style="glass"] .account-card:hover,
+html[data-style="glass"] .game-card:hover,
+html[data-style="glass"] .admin-card:hover,
+html[data-style="glass"] .settings-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--phx-shadow-lg);
+    background-color: var(--lg-glass-strong);
+  }
+html[data-style="glass"] .game-card.active,
+html[data-style="glass"] .account-card.active {
+    border-color: var(--phx-primary);
+    box-shadow: 0 0 0 1px var(--phx-primary), var(--phx-shadow-lg);
+  }
+}
+
+/* Hero 面板：蓝色镜面玻璃 */
+html[data-style="glass"] .hero-panel {
+  background:
+    linear-gradient(135deg, rgba(10, 132, 255, 0.14), rgba(124, 58, 237, 0.08) 55%, rgba(34, 211, 238, 0.06)),
+    var(--lg-specular);
+  background-color: var(--lg-glass-strong);
+  border-radius: var(--phx-radius-lg);
+}
+html[data-style="glass"][data-theme="dark"] .hero-panel {
+  background:
+    linear-gradient(135deg, rgba(64, 156, 255, 0.2), rgba(124, 58, 237, 0.12) 55%, rgba(0, 190, 255, 0.08)),
+    var(--lg-specular);
+  background-color: var(--lg-glass-strong);
+}
+
+/* ── 5. 底部导航：悬浮玻璃胶囊 ── */
+html[data-style="glass"] .bottom-nav {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass-strong);
+  backdrop-filter: blur(var(--lg-blur-strong)) saturate(1.8);
+  -webkit-backdrop-filter: blur(var(--lg-blur-strong)) saturate(1.8);
+  border: 1px solid var(--lg-glass-border);
+  border-radius: 26px;
+  box-shadow: var(--phx-shadow-lg);
+}
+html[data-style="glass"] .bottom-nav-item {
+  border-radius: 20px;
+  transition: background-color 0.3s var(--phx-ease-spring), color 0.3s ease, transform 0.3s var(--phx-ease-spring);
+}
+html[data-style="glass"] .bottom-nav-item.active {
+  background: var(--phx-primary-bg);
+  color: var(--phx-primary);
+}
+@media (hover: hover) {
+  .bottom-nav-item:hover:not(.active) {
+    background-color: var(--lg-glass);
+  }
+}
+
+/* ── 6. 侧边栏（桌面管理） ── */
+html[data-style="glass"] .sidebar {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass);
+  backdrop-filter: blur(var(--lg-blur-strong)) saturate(1.7);
+  -webkit-backdrop-filter: blur(var(--lg-blur-strong)) saturate(1.7);
+  border: 1px solid var(--lg-glass-border);
+}
+
+/* ── 7. 按钮 ── */
+html[data-style="glass"] .btn {
+  border-radius: 14px;
+  font-weight: 600;
+  transition:
+    transform 0.25s var(--phx-ease-spring),
+    box-shadow 0.25s ease,
+    background-color 0.2s ease,
+    filter 0.2s ease;
+}
+html[data-style="glass"] .btn-primary {
+  background: linear-gradient(180deg, #2a96ff, #0a84ff);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 6px 18px rgba(10, 132, 255, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #3aa1ff, #0077ed);
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(10, 132, 255, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
+}
+html[data-style="glass"] .btn-outline {
+  background: var(--lg-glass);
+  border: 1px solid var(--phx-border);
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ── 8. 输入框：内凹玻璃 ── */
+html[data-style="glass"] .input {
+  background: var(--lg-glass-soft);
+  border: 1px solid var(--phx-border-light);
+  border-radius: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+html[data-style="glass"] .input:focus {
+  border-color: var(--phx-primary);
+  box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.16);
+  background-color: var(--lg-glass);
+  outline: none;
+}
+html[data-style="glass"][data-theme="dark"] .input:focus {
+  box-shadow: 0 0 0 4px rgba(64, 156, 255, 0.22);
+}
+
+/* ── 9. 结果条 / 提示 ── */
+html[data-style="glass"] .result-box {
+  border-radius: 14px;
+}
+
+/* ── 10. 弹窗 ── */
+html[data-style="glass"] .modal-backdrop {
+  /* 去掉遮罩的 backdrop-filter：有多个浏览器把 backdrop-filter 放在含
+     position:fixed/portal 弹窗的父级时会导致子内容(弹窗主体)不绘制 */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  /* 提升遮罩透明度，确保在极光背景上有足够对比度 */
+  background: rgba(20, 24, 33, 0.55);
+}
+html[data-style="glass"] .modal-content {
+  border-radius: var(--phx-radius-lg);
+  animation: lg-modal-pop 0.5s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+
+/* ── 11. 启动屏 ── */
+html[data-style="glass"] .boot-screen {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(10, 132, 255, 0.18), transparent 55%),
+    radial-gradient(circle at 75% 75%, rgba(124, 58, 237, 0.14), transparent 55%),
+    var(--phx-bg);
+}
+
+/* ── 12. 状态胶囊 / 切换器 ── */
+html[data-style="glass"] .status-pill,
+html[data-style="glass"] .log-level {
+  border-radius: 999px;
+}
+html[data-style="glass"] .tab-strip button,
+html[data-style="glass"] .capsule-switch button,
+html[data-style="glass"] .pill-slider button {
+  border-radius: 999px;
+  transition: background-color 0.28s var(--phx-ease-spring), color 0.2s ease, transform 0.2s ease;
+}
+html[data-style="glass"] .tab-strip button.active,
+html[data-style="glass"] .capsule-switch button.active,
+html[data-style="glass"] .pill-slider button.active {
+  background: var(--phx-primary-bg);
+  color: var(--phx-primary);
+}
+html[data-style="glass"] .toggle-slider {
+  transition: background-color 0.3s ease;
+}
+
+/* ── 13. 丝滑动效 ── */
+html[data-style="glass"] .page-enter {
+  animation: lg-page-enter 0.55s var(--phx-ease-spring) both;
+}
+@keyframes lg-page-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+  /* 不 animation filter: blur — filter 非 none 会为 position:fixed 后代
+     （如内联弹窗 modal-backdrop）创建包含块，导致弹窗 fixed 定位错乱 */
+}
+@keyframes lg-modal-pop {
+  0%   { transform: scale(0.9) translateY(12px); opacity: 0; }
+  60%  { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 卡片进入：柔和上浮 + 去模糊 */
+html[data-style="glass"] .game-card,
+html[data-style="glass"] .account-card,
+html[data-style="glass"] .admin-card,
+html[data-style="glass"] .card {
+  animation: lg-card-enter 0.6s var(--phx-ease-spring) both;
+}
+@keyframes lg-card-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+  /* 不 animation filter: blur — 避免大量卡片同时触发逐帧重绘 */
+}
+
+/* 滚动条更通透 */
+html[data-style="glass"] ::-webkit-scrollbar-thumb {
+  background: var(--phx-border-light);
+  border-radius: 999px;
+}
+html[data-style="glass"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--phx-border);
+}
+
+/* ── 14. 无障碍：降低动态偏好 ── */
+@media (prefers-reduced-motion: reduce) {
+html[data-style="glass"] body::before { animation: none; }
+html[data-style="glass"] *,
+html[data-style="glass"] *::before,
+html[data-style="glass"] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── 15. 布局穿透：让极光背景透过主布局 ── */
+html[data-style="glass"] .app-layout,
+html[data-style="glass"] .main-content-full,
+html[data-style="glass"] .main-content,
+html[data-style="glass"] .content-body,
+html[data-style="glass"] .dashboard,
+html[data-style="glass"] .auth-page {
+  background: transparent;
+}
+
+/* ── 16. 暗色主题玻璃表面（覆盖 themes.css 的旧 opaque 规则） ── */
+html[data-style="glass"][data-theme="dark"] .bottom-nav {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass-strong);
+  border-color: var(--lg-glass-border);
+  box-shadow: var(--phx-shadow-lg);
+}
+html[data-style="glass"][data-theme="dark"] .game-card {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass);
+  border-color: var(--lg-glass-border-soft);
+  box-shadow: var(--phx-shadow-base);
+}
+html[data-style="glass"][data-theme="dark"] .game-card:hover {
+  box-shadow: var(--phx-shadow-lg);
+}
+html[data-style="glass"][data-theme="dark"] .active-snapshot {
+  background: var(--lg-glass);
+  border-color: var(--lg-glass-border-soft);
+}
+html[data-style="glass"][data-theme="dark"] .input {
+  background: var(--lg-glass-soft);
+  border-color: var(--phx-border-light);
+  color: var(--phx-text);
+}
+html[data-style="glass"][data-theme="dark"] .input:focus {
+  background-color: var(--lg-glass);
+  border-color: var(--phx-primary);
+  box-shadow: 0 0 0 4px rgba(64, 156, 255, 0.22);
+}
+html[data-style="glass"][data-theme="dark"] .edit-drawer,
+html[data-style="glass"][data-theme="dark"] .log-item,
+html[data-style="glass"][data-theme="dark"] .help-popup,
+html[data-style="glass"][data-theme="dark"] .result-box,
+html[data-style="glass"][data-theme="dark"] .sms-info-box,
+html[data-style="glass"][data-theme="dark"] .mini-panel {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass);
+  border-color: var(--lg-glass-border-soft);
+}
+html[data-style="glass"][data-theme="dark"] .tab-strip {
+  background: var(--lg-glass-soft);
+  border-color: var(--lg-glass-border-soft);
+}
+html[data-style="glass"][data-theme="dark"] .modal-backdrop {
+  /* 同 light 模式：去掉 backdrop-filter 避免 Chrome 不绘制弹窗内容 */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html[data-style="glass"][data-theme="dark"] .modal-content {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass-strong);
+  border-color: var(--lg-glass-border);
+}
+html[data-style="glass"][data-theme="dark"] .btn-outline {
+  background: var(--lg-glass);
+  border-color: var(--phx-border);
+  color: var(--phx-text-secondary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+html[data-style="glass"][data-theme="dark"] .account-card {
+  background: var(--lg-specular);
+  background-color: var(--lg-glass);
+  border-color: var(--lg-glass-border-soft);
+}
+
+/* ── 17. 旧青色强调色 → iOS 蓝 ── */
+html[data-style="glass"] .boot-owl-wrap::before {
+  background: radial-gradient(circle, rgba(10, 132, 255, 0.3) 0%, rgba(10, 132, 255, 0) 70%);
+}
+.toast-ok   { background: rgba(52, 199, 89, 0.92); color: #fff; }
+.toast-err  { background: rgba(255, 59, 48, 0.92); color: #fff; }
+.toast-info { background: rgba(10, 132, 255, 0.92); color: #fff; }
+@keyframes phx-copy-flash {
+  0%   { background: rgba(10, 132, 255, 0.2); }
+html[data-style="glass"] 100% { background: transparent; }
+}
+html[data-style="glass"] .skeleton-line,
+html[data-style="glass"] .skeleton-avatar {
+  background: linear-gradient(90deg, var(--phx-border-light) 25%, rgba(255, 255, 255, 0.55) 50%, var(--phx-border-light) 75%);
+  background-size: 200% 100%;
+}
+html[data-style="glass"][data-theme="dark"] .skeleton-line,
+html[data-style="glass"][data-theme="dark"] .skeleton-avatar {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0.06) 75%);
+  background-size: 200% 100%;
+}
+
+/* ── 18. 镜面高光：关键表面顶部透光边 ── */
+html[data-style="glass"] .hero-panel,
+html[data-style="glass"] .auth-card,
+html[data-style="glass"] .modal-content {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    var(--phx-shadow-base);
+}
+html[data-style="glass"][data-theme="dark"] .hero-panel,
+html[data-style="glass"][data-theme="dark"] .auth-card,
+html[data-style="glass"][data-theme="dark"] .modal-content {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    var(--phx-shadow-base);
+}
+
+/* ── 19. 修复：弹窗必须可读且必须出现 ──
+ * (a) backdrop-filter 放在含可滚动内容的弹窗上，Chrome 会不绘制滚动内容
+ *     （问卷调查弹窗只显示遮罩、内容空白）。实心背景 + 关掉 blur 即可。
+ * (b) 玻璃入场动画 lg-modal-pop 从 opacity:0 + blur 开始且 fill-mode:both，
+ *     在部分环境卡在 0% 帧会让弹窗永远 opacity:0 → "弹不出来"。这里直接
+ *     禁用入场动画，弹窗立即以 opacity:1 显示。 */
+html[data-style="glass"] .modal-content {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  animation: none;
+  opacity: 1;
+  /* 移除 transform: translateZ(0) / will-change：它们在玻璃主题大量
+     backdrop-filter 的 GPU 压力下，反而会让弹窗主体不绘制。普通渲染
+     （与动物岛一致）才是稳定的。 */
+}
+html[data-style="glass"][data-theme="dark"] .modal-content {
+  background: #1c1c1e;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  animation: none;
+  opacity: 1;
+}
+
+/* ── 20. 修复：首页令牌切换容器要有圆角+内边距（不再是无圆角的纯白横条） ── */
+html[data-style="glass"] .token-selector {
+  border-radius: var(--phx-radius-base);
+  padding: 10px 14px;
+}
+
+/* ── 21. 性能优化：海量卡片（后台管理页） ──
+ * (a) content-visibility:auto —— 屏外卡片跳过布局与绘制，滚动时不再逐张重绘。
+ * (b) 阴影降级为轻量值 —— 大模糊半径阴影在成百上千卡片下绘制开销极高。 */
+html[data-style="glass"] .admin-card,
+html[data-style="glass"] .game-card,
+html[data-style="glass"] .account-card,
+html[data-style="glass"] .settings-card,
+html[data-style="glass"] .card,
+html[data-style="glass"] .log-item,
+html[data-style="glass"] .activity-block,
+html[data-style="glass"] .mini-panel {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+html[data-style="glass"] .log-item {
+  contain-intrinsic-size: auto 84px;
+}
+html[data-style="glass"] .admin-card,
+html[data-style="glass"] .game-card,
+html[data-style="glass"] .account-card,
+html[data-style="glass"] .settings-card,
+html[data-style="glass"] .card {
+  box-shadow: 0 1px 2px rgba(20, 24, 33, 0.05), 0 4px 12px rgba(20, 24, 33, 0.07);
+}
+html[data-style="glass"] .admin-card:hover,
+html[data-style="glass"] .game-card:hover,
+html[data-style="glass"] .account-card:hover,
+html[data-style="glass"] .settings-card:hover,
+html[data-style="glass"] .card:hover {
+  box-shadow: 0 2px 6px rgba(20, 24, 33, 0.07), 0 10px 24px rgba(20, 24, 33, 0.1);
+}

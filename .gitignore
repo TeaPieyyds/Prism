@@ -1,0 +1,43 @@
+# ---- Runtime secrets / credentials: NEVER commit ----
+config.json
+proxies.conf
+accounts_v2.json
+ai_proxy.json
+cookies.json
+cookie.json
+fresh_cookie.json
+adb_cookie.json
+session.json
+fbtokens.json
+*.json.bak
+
+# ---- Databases & logs ----
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.log
+*.pcap
+*.har
+
+# ---- Build artifacts & binaries ----
+backend/cmd/phoenix_server/phoenix_server
+*.test
+dist/
+node_modules/
+.vite/
+*.so
+
+# ---- Editor / OS ----
+.vscode/
+.idea/
+.DS_Store
+*.sw?
+
+# ---- Node/other ----
+__pycache__/
+*.pyc
+.env
+.env.*
+backend/phoenix_server
+phoenix_server

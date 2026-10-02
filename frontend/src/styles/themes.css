@@ -1,0 +1,816 @@
+/* ============================================
+ * Prism - Animal Island 风格主题
+ * ============================================ */
+
+:root {
+  --phx-primary: #19c8b9;
+  --phx-primary-hover: #3dd4c6;
+  --phx-primary-active: #50B9AB;
+  --phx-primary-bg: #e6f9f6;
+  --phx-success: #6fba2c;
+  --phx-success-hover: #85cc45;
+  --phx-warning: #f5c31c;
+  --phx-warning-hover: #f7d04a;
+  --phx-error: #e05a5a;
+  --phx-error-hover: #e87878;
+  --phx-text: #794f27;
+  --phx-text-secondary: #9f927d;
+  --phx-text-disabled: #c4b89e;
+  --phx-border: #aaa69d;
+  --phx-border-hover: #827157;
+  --phx-border-light: #e8e2d6;
+  --phx-bg: #f8f8f0;
+  --phx-bg-secondary: #f0e8d8;
+  --phx-bg-card: #fffcf4;
+  --phx-bg-dark: #2b2118;
+  --phx-font: 'Nunito', 'Noto Sans SC', 'Zen Maru Gothic', 'HarmonyOS Sans SC',
+    -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --phx-font-size-sm: 12px;
+  --phx-font-size-base: 14px;
+  --phx-font-size-lg: 16px;
+  --phx-spacing-xs: 4px;
+  --phx-spacing-sm: 8px;
+  --phx-spacing-md: 12px;
+  --phx-spacing-lg: 16px;
+  --phx-spacing-xl: 24px;
+  --phx-radius-sm: 16px;
+  --phx-radius-base: 18px;
+  --phx-radius-lg: 24px;
+  --phx-border-width: 2px;
+  --phx-shadow-sm: 0 1px 2px rgba(61,52,40,.05), 0 2px 6px rgba(61,52,40,.05);
+  --phx-shadow-base: 0 1px 2px rgba(61,52,40,.06), 0 8px 20px rgba(61,52,40,.08);
+  --phx-shadow-lg: 0 2px 6px rgba(61,52,40,.08), 0 20px 44px rgba(61,52,40,.13);
+  --phx-motion-fast: 0.15s;
+  --phx-motion-base: 0.25s;
+  --phx-motion-slow: 0.5s;
+  --phx-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* 暖色强调卡（板栗余额 / 主令牌高亮）——深色模式会覆盖为暗色 */
+  --phx-warm-bg: linear-gradient(135deg, #fdf6e8, #f5ecd7);
+  --phx-warm-solid: #f5ecd7;
+  --phx-warm-border: #e5d5b8;
+  --phx-warm-text: #5d4b36;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--phx-font);
+  background: var(--phx-bg);
+  color: var(--phx-text);
+  min-height: 100vh;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--phx-border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--phx-border); }
+
+/* ══════════════════════════════════════
+ *  Keyframes — each element gets its own style
+ * ══════════════════════════════════════ */
+
+/* Hero title: refined fade + gentle rise */
+@keyframes phx-hero-rise {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Cards: subtle slide-up fade */
+@keyframes phx-card-enter {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Active badge: sparkle shimmer */
+@keyframes phx-sparkle {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(25,200,185,0); }
+  50%      { box-shadow: 0 0 6px 2px rgba(25,200,185,.25); }
+}
+
+/* Loading dots: gentle bounce */
+@keyframes phx-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40%           { transform: translateY(-8px); }
+}
+
+/* Modal: expand from center */
+@keyframes phx-modal-pop {
+  0%   { transform: scale(.85); opacity: 0; }
+  70%  { transform: scale(1.03); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Toast/success: slide from right */
+@keyframes phx-slide-right {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+/* Simple fade-in */
+@keyframes phx-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ══════════════════════════════════════
+ *  Animation Classes — applied by element type
+ * ══════════════════════════════════════ */
+
+/* Hero title */
+.hero-panel h1 { animation: phx-hero-rise .5s var(--phx-ease-spring) both; }
+.hero-panel .eyebrow { animation: phx-fade-in .4s ease-out .05s both; }
+.hero-panel p { animation: phx-fade-in .4s ease-out .12s both; }
+
+/* Card enter with staggered rotation */
+.game-card, .account-card { animation: phx-card-enter .5s ease-out both; }
+.game-grid > *:nth-child(1){animation-delay:.00s}
+.game-grid > *:nth-child(2){animation-delay:.06s}
+.game-grid > *:nth-child(3){animation-delay:.12s}
+.game-grid > *:nth-child(4){animation-delay:.18s}
+.game-grid > *:nth-child(5){animation-delay:.24s}
+.game-grid > *:nth-child(6){animation-delay:.30s}
+.game-grid > *:nth-child(7){animation-delay:.36s}
+.game-grid > *:nth-child(8){animation-delay:.42s}
+
+/* Admin cards */
+.admin-card { animation: phx-card-enter .4s ease-out both; }
+.admin-grid > *:nth-child(1){animation-delay:.00s}
+.admin-grid > *:nth-child(2){animation-delay:.05s}
+.admin-grid > *:nth-child(3){animation-delay:.10s}
+.admin-grid > *:nth-child(4){animation-delay:.15s}
+.admin-grid > *:nth-child(5){animation-delay:.20s}
+.admin-grid > *:nth-child(6){animation-delay:.25s}
+.admin-grid > *:nth-child(7){animation-delay:.30s}
+.admin-grid > *:nth-child(8){animation-delay:.35s}
+
+/* Card hover */
+.game-card, .account-card, .admin-card, .card {
+  transition: transform .28s var(--phx-ease-spring), box-shadow .28s ease, border-color .2s ease;
+}
+.game-card:hover, .account-card:hover, .admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(61,52,40,.14);
+}
+
+/* Sidebar logo: static, hover lift only */
+.sidebar-logo { transition: transform .3s var(--phx-ease-spring); }
+.sidebar-logo:hover { transform: scale(1.12); }
+
+
+/* Button press */
+.btn:active, .btn-sm:active { transform: scale(.97); transition: transform 160ms var(--phx-ease-spring); }
+.btn, .btn-sm { transition: background var(--phx-motion-fast) ease, color var(--phx-motion-fast) ease, filter var(--phx-motion-fast) ease, transform var(--phx-motion-fast) ease; }
+
+/* Tab strip */
+.tab-strip button { transition: background var(--phx-motion-base) ease, color var(--phx-motion-base) ease, transform var(--phx-motion-base) ease, box-shadow var(--phx-motion-base) ease; }
+
+/* Nav items */
+.nav-item { transition: background var(--phx-motion-fast) ease, color var(--phx-motion-fast) ease, transform var(--phx-motion-fast) ease; }
+.nav-item.active { animation: phx-pop-in .3s ease-out both; }
+
+/* Modal */
+.modal-backdrop { animation: phx-fade-in .2s ease-out both; backdrop-filter: blur(2px); }
+.modal-content { animation: phx-modal-pop .35s cubic-bezier(.34,1.56,.64,1) both; }
+
+/* Page sections — staggered slide-up */
+.page-stack > * { animation: phx-card-enter .55s ease-out both; }
+.page-stack > *:nth-child(1){animation-delay:.00s}
+.page-stack > *:nth-child(2){animation-delay:.10s}
+.page-stack > *:nth-child(3){animation-delay:.20s}
+.page-stack > *:nth-child(4){animation-delay:.30s}
+
+/* Log dot: static, soft ring */
+.log-dot { box-shadow: 0 0 0 5px var(--phx-primary-bg); }
+
+/* Empty state mark: calm, static */
+.empty-state::before {
+  content: '🦉';
+  display: block;
+  font-size: 30px;
+  margin-bottom: 8px;
+  opacity: .75;
+}
+
+/* Shimmer loading */
+.phx-loading-shimmer {
+  background: linear-gradient(90deg,var(--phx-border-light) 25%,var(--phx-bg-card) 50%,var(--phx-border-light) 75%);
+  background-size: 200% 100%;
+  animation: phx-shimmer 1.5s ease-in-out infinite;
+}
+
+/* Result box slide-in */
+.result-box { animation: phx-slide-right .3s ease-out both; }
+
+/* Tab content */
+.tab-strip + * { animation: phx-fade-in .3s ease-out both; }
+
+/* ── Input focus ring ── */
+.input, textarea.input {
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.input:focus, textarea.input:focus {
+  border-color: var(--phx-primary);
+  box-shadow: 0 0 0 3px rgba(25,200,185,.12);
+  outline: none;
+}
+
+/* ── Status pill polish ── */
+.status-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(111,186,44,.12);
+  color: var(--phx-success);
+}
+.status-pill.danger { background: rgba(224,90,90,.12); color: var(--phx-error); }
+
+/* ══════════════════════════════════════
+ *  Dark Mode — 深蓝灰主题，干净清爽
+ * ══════════════════════════════════════ */
+
+[data-theme="dark"] {
+  /* ── 背景层级 ── */
+  --phx-bg: #0f1720;                /* 页面底色 — 深蓝黑 */
+  --phx-bg-secondary: #1a2332;      /* 次级背景 */
+  --phx-bg-card: #1e2938;           /* 卡片 — 比底色略亮一层 */
+  --phx-bg-dark: #e2e8f0;           /* 反转：原本暗色区变亮 */
+
+  /* ── 文字 ── */
+  --phx-text: #e2e8f0;              /* 主文字 — 清透浅灰 */
+  --phx-text-secondary: #94a3b8;    /* 次要 — 柔和 slate */
+  --phx-text-disabled: #475569;     /* 禁用文字 */
+
+  /* ── 边框 ── */
+  --phx-border: #334155;            /* 主边框 */
+  --phx-border-hover: #64748b;      /* 悬停边框 */
+  --phx-border-light: #1e2938;      /* 浅边框 — 微妙分割 */
+
+  /* ── 主色系 — 暗色下提升亮度 ── */
+  --phx-primary: #2dd4bf;
+  --phx-primary-hover: #5eead4;
+  --phx-primary-active: #14b8a6;
+  --phx-primary-bg: rgba(45, 212, 191, 0.12);
+
+  /* ── 功能色 ── */
+  --phx-success: #4ade80;
+  --phx-success-hover: #6ee7a0;
+  --phx-warning: #fbbf24;
+  --phx-warning-hover: #fcd34d;
+  --phx-error: #f87171;
+  --phx-error-hover: #fca5a5;
+
+  /* ── 阴影 — 暗色下淡化 ── */
+  --phx-shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --phx-shadow-base: 0 2px 6px rgba(0,0,0,.35), 0 10px 26px rgba(0,0,0,.45);
+  --phx-shadow-lg: 0 4px 12px rgba(0,0,0,.4), 0 24px 56px rgba(0,0,0,.55);
+
+  /* 暖色强调卡在深色模式下转为烟熏暗色（保留透光），白字清晰可读 */
+  --phx-warm-bg: linear-gradient(135deg, rgba(24, 24, 28, 0.62), rgba(18, 18, 22, 0.62));
+  --phx-warm-solid: rgba(22, 22, 26, 0.66);
+  --phx-warm-border: rgba(255,255,255,0.14);
+  --phx-warm-text: #f5f5f7;
+}
+
+[data-theme="dark"] body {
+  background: var(--phx-bg);
+  color: var(--phx-text);
+}
+
+/* ─ 启动屏 ─ */
+[data-theme="dark"] .boot-screen {
+  background: radial-gradient(circle at top left, #1a2e3a, transparent 45%), var(--phx-bg);
+}
+
+/* ─ 底部导航栏 ─ */
+[data-theme="dark"] .bottom-nav {
+  background: rgba(15, 23, 32, 0.85);
+  border-color: rgba(51, 65, 85, 0.45);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03) inset;
+}
+
+/* ─ Hero 面板 ─ */
+[data-theme="dark"] .hero-panel {
+  background:
+    radial-gradient(circle at 88% 20%, rgba(45, 212, 191, 0.12), transparent 28%),
+    linear-gradient(135deg, #1a2e3a 0%, #162230 52%, #141e2c 100%);
+  border-color: rgba(71, 85, 105, 0.3);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+}
+
+/* ─ 活跃账号快照 ─ */
+[data-theme="dark"] .active-snapshot {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.06);
+}
+
+/* ─ 通用卡片 ─ */
+[data-theme="dark"] .card {
+  background: var(--phx-bg-card);
+  border-color: var(--phx-border-light);
+}
+
+/* ─ 游戏卡片 ─ */
+[data-theme="dark"] .game-card {
+  background: linear-gradient(180deg, rgba(30,41,56,0.95), rgba(26,35,50,0.95));
+  border-color: var(--phx-border-light);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+}
+[data-theme="dark"] .game-card:hover {
+  box-shadow: 0 16px 34px rgba(0,0,0,0.55);
+}
+[data-theme="dark"] .game-card.active {
+  border-color: var(--phx-primary);
+}
+
+/* ─ 游戏头像 ─ */
+[data-theme="dark"] .game-avatar {
+  border-color: rgba(255,255,255,0.06);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.5);
+}
+[data-theme="dark"] .game-avatar.fallback {
+  background: linear-gradient(135deg, #475569, #334155);
+  color: #e2e8f0;
+}
+
+/* ─ 游戏统计 ─ */
+[data-theme="dark"] .game-stat {
+  background: rgba(255,255,255,0.04);
+}
+
+/* ─ 管理卡片 ─ */
+[data-theme="dark"] .admin-card {
+  background: var(--phx-bg-card);
+  border-color: var(--phx-border-light);
+}
+[data-theme="dark"] .admin-card p {
+  color: var(--phx-text-secondary);
+}
+
+/* ─ 输入框 ─ */
+[data-theme="dark"] .input {
+  background: #0f1720;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+[data-theme="dark"] .input::placeholder {
+  color: #64748b;
+}
+[data-theme="dark"] .input:focus {
+  border-color: var(--phx-primary);
+  box-shadow: 0 0 0 3px rgba(45,212,191,0.15);
+}
+
+/* ─ 编辑抽屉 ─ */
+[data-theme="dark"] .edit-drawer {
+  background: #0f1720;
+  border-color: var(--phx-border-light);
+}
+
+/* ─ Tab 栏 ─ */
+[data-theme="dark"] .tab-strip {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--phx-border-light);
+}
+[data-theme="dark"] .tab-strip button {
+  color: var(--phx-text-secondary);
+}
+[data-theme="dark"] .tab-strip button.active {
+  background: var(--phx-primary);
+  color: #0f1720;
+}
+
+/* ─ 胶囊开关 ─ */
+[data-theme="dark"] .capsule-switch {
+  background: var(--phx-bg);
+  border-color: var(--phx-border-light);
+}
+[data-theme="dark"] .capsule-switch button {
+  color: var(--phx-text-secondary);
+}
+[data-theme="dark"] .capsule-switch button.active {
+  background: var(--phx-primary);
+  color: #0f1720;
+}
+
+/* ─ 设置行 ─ */
+[data-theme="dark"] .setting-row {
+  border-bottom-color: var(--phx-border-light);
+}
+[data-theme="dark"] .setting-row strong {
+  color: var(--phx-text);
+}
+
+/* ─ 底栏双按钮 ─ */
+[data-theme="dark"] .cs-link {
+  background: var(--phx-bg-card);
+  border-color: var(--phx-border-light);
+  color: var(--phx-text-secondary);
+}
+[data-theme="dark"] .cs-link:hover:not(:disabled) {
+  border-color: var(--phx-primary);
+  background: var(--phx-primary-bg);
+  color: var(--phx-primary);
+}
+
+/* ─ 日志 ─ */
+[data-theme="dark"] .log-item {
+  background: #0f1720;
+  border-color: var(--phx-border-light);
+}
+[data-theme="dark"] .log-detail {
+  background: rgba(255,255,255,0.03);
+}
+
+/* ─ 模态框 ─ */
+[data-theme="dark"] .modal-backdrop {
+  background: rgba(0,0,0,0.6);
+}
+[data-theme="dark"] .modal-content {
+  background: var(--phx-bg-card);
+  border-color: var(--phx-border-light);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.7);
+}
+[data-theme="dark"] .modal-detail {
+  background: rgba(255,255,255,0.04);
+}
+[data-theme="dark"] .modal-content.cute-fluffy::before,
+[data-theme="dark"] .modal-content.cute-fluffy::after {
+  background: var(--phx-bg-card);
+  border-color: var(--phx-border-light);
+}
+
+/* ─ 帮助弹窗 ─ */
+[data-theme="dark"] .help-popup {
+  background: #0f1720;
+  border-color: var(--phx-border-light);
+  color: var(--phx-text-secondary);
+}
+
+/* ─ 结果框 ─ */
+[data-theme="dark"] .result-box {
+  background: #0f1720;
+  border-color: var(--phx-border-light);
+}
+[data-theme="dark"] .result-box.ok {
+  border-color: var(--phx-success);
+  color: var(--phx-success);
+}
+[data-theme="dark"] .result-box.err {
+  border-color: var(--phx-error);
+  color: var(--phx-error);
+}
+[data-theme="dark"] .result-box.info {
+  border-color: var(--phx-primary);
+  color: var(--phx-primary);
+}
+
+/* ─ 骨架屏 ─ */
+[data-theme="dark"] .skeleton-card {
+  background: var(--phx-bg-card);
+  border-color: var(--phx-border-light);
+}
+[data-theme="dark"] .skeleton-line {
+  background: linear-gradient(90deg, #1e2938 25%, #263548 50%, #1e2938 75%);
+  background-size: 200% 100%;
+}
+[data-theme="dark"] .skeleton-avatar {
+  background: linear-gradient(90deg, #1e2938 25%, #263548 50%, #1e2938 75%);
+  background-size: 200% 100%;
+}
+
+/* ─ 等宽文字 ─ */
+[data-theme="dark"] .mono-line {
+  background: rgba(255,255,255,0.04);
+}
+
+/* ─ 滚动条 ─ */
+[data-theme="dark"] ::-webkit-scrollbar-track { background: var(--phx-bg); }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* ─ 信息行 ─ */
+[data-theme="dark"] .info-row {
+  border-bottom-color: var(--phx-border-light);
+}
+
+/* ─ 皮肤标签 ─ */
+[data-theme="dark"] .skin-chip {
+  color: #94a3b8;
+  background: rgba(148,163,184,0.1);
+}
+
+/* ─ SMS 框 ─ */
+[data-theme="dark"] .sms-info-box {
+  background: #0f1720;
+}
+
+/* ─ Mini 面板 ─ */
+[data-theme="dark"] .mini-panel {
+  background: #0f1720;
+  border-color: var(--phx-border-light);
+}
+
+/* ─ 卡片悬停 ─ */
+[data-theme="dark"] .game-card:hover,
+[data-theme="dark"] .account-card:hover,
+[data-theme="dark"] .admin-card:hover,
+[data-theme="dark"] .card:hover {
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+}
+
+/* ─ 按钮 outline ─ */
+[data-theme="dark"] .btn-outline {
+  border-color: #334155;
+  color: var(--phx-text-secondary);
+}
+[data-theme="dark"] .btn-outline:hover:not(:disabled) {
+  background: var(--phx-primary-bg);
+  border-color: var(--phx-primary);
+  color: var(--phx-primary);
+}
+
+/* ─ 状态标签 ─ */
+[data-theme="dark"] .status-pill {
+  background: rgba(74,222,128,0.12);
+  color: var(--phx-success);
+}
+[data-theme="dark"] .status-pill.danger {
+  background: rgba(248,113,113,0.12);
+  color: var(--phx-error);
+}
+
+/* ─ 认证页 ─ */
+[data-theme="dark"] .auth-card {
+  background: var(--phx-bg-card);
+  border-color: var(--phx-border-light);
+  box-shadow: var(--phx-shadow-lg);
+}
+[data-theme="dark"] .auth-header h1 {
+  color: var(--phx-text);
+}
+
+/* ─ 日志等级 ─ */
+[data-theme="dark"] .log-level.error {
+  background: rgba(248,113,113,0.15);
+  color: #fca5a5;
+}
+[data-theme="dark"] .log-level.warn {
+  background: rgba(251,191,36,0.15);
+  color: #fcd34d;
+}
+[data-theme="dark"] .log-level.info {
+  background: rgba(74,222,128,0.12);
+  color: #6ee7a0;
+}
+
+/* ─ Toggle 开关 ─ */
+[data-theme="dark"] .toggle-slider {
+  background: #334155;
+}
+[data-theme="dark"] .toggle-slider::before {
+  background: #94a3b8;
+}
+
+/* ─ 帮助图标 ─ */
+[data-theme="dark"] .help-icon {
+  background: #334155;
+}
+
+/* ─ Account 卡片 ─ */
+[data-theme="dark"] .account-card {
+  background: var(--phx-bg);
+  border-color: var(--phx-border-light);
+}
+[data-theme="dark"] .account-card:hover {
+  border-color: var(--phx-border-hover);
+}
+[data-theme="dark"] .account-name {
+  color: var(--phx-text);
+}
+[data-theme="dark"] .account-details {
+  color: var(--phx-text-secondary);
+}
+
+/* ─ 轮询/统计控件标签 ─ */
+[data-theme="dark"] .stats-controls .control-label {
+  color: var(--phx-text-secondary);
+}
+
+/* ─ 复选框行 ─ */
+[data-theme="dark"] .check-line {
+  color: var(--phx-text-secondary);
+}
+
+/* ─ 板栗规则面板 ─ */
+.nuts-policy-bg { background: var(--phx-bg-secondary); }
+.nuts-policy-teal { background: var(--phx-primary-bg); }
+[data-theme="dark"] .nuts-policy-bg { background: rgba(255,255,255,0.04); }
+[data-theme="dark"] .nuts-policy-teal { background: var(--phx-primary-bg); }
+
+/* ─ verify 链接 ─ */
+[data-theme="dark"] .verify-link {
+  background: var(--phx-warning);
+  color: #0f1720;
+}
+
+/* ── Selectable text (mono) ── */
+.mono-line {
+  font-family: 'SF Mono','Cascadia Code','Fira Code',monospace;
+  font-size: 11px;
+  background: rgba(0,0,0,.03);
+  padding: 4px 8px;
+  border-radius: 6px;
+  word-break: break-all;
+  user-select: all;
+}
+
+/* ── Card active indicator ── */
+.game-card.active, .account-card.active {
+  border-color: var(--phx-primary) !important;
+  box-shadow: 0 0 0 1px var(--phx-primary), var(--phx-shadow-base);
+}
+
+/* ── Sidebar nav active ── */
+.nav-item.active {
+  background: var(--phx-primary-bg);
+  color: var(--phx-primary-active);
+  font-weight: 700;
+}
+
+/* ── Result box ── */
+.result-box.ok { background: rgba(111,186,44,.08); color: var(--phx-success); }
+.result-box.err { background: rgba(224,90,90,.08); color: var(--phx-error); }
+
+/* ── Boot screen ── */
+.boot-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  background: var(--phx-bg);
+}
+
+/* 优雅悬浮：极轻微上下 + 缓慢旋转的心跳感，非呼吸 */
+@keyframes phx-float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  25%      { transform: translateY(-6px) rotate(-1deg); }
+  50%      { transform: translateY(0) rotate(2deg); }
+  75%      { transform: translateY(-3px) rotate(1deg); }
+}
+
+/* 环绕光晕：缓慢旋转的柔和 teal 光晕 */
+.boot-owl-wrap {
+  position: relative;
+  animation: phx-float 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+.boot-owl-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(25,200,185,0.28) 0%, rgba(25,200,185,0) 70%);
+  animation: phx-orbit 6s linear infinite;
+}
+@keyframes phx-orbit {
+  from { transform: rotate(0deg) scale(1); opacity: 0.7; }
+  50%  { transform: rotate(180deg) scale(1.15); opacity: 1; }
+  to   { transform: rotate(360deg) scale(1); opacity: 0.7; }
+}
+
+/* ── Toast notifications ── */
+@keyframes phx-toast-in {
+  from { transform: translateX(60px) scale(0.85); opacity: 0; }
+  to   { transform: translateX(0) scale(1); opacity: 1; }
+}
+.toast-item {
+  animation: phx-toast-in 250ms var(--phx-ease-spring) both;
+  padding: 10px 18px;
+  border-radius: var(--phx-radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--phx-shadow-lg);
+  backdrop-filter: blur(8px);
+  max-width: 320px;
+}
+.toast-ok  { background: rgba(111,186,44,.92); color: #fff; }
+.toast-err { background: rgba(224,90,90,.92); color: #fff; }
+.toast-info{ background: rgba(25,200,185,.92); color: #fff; }
+
+/* ── Button loading spinner ── */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: .7;
+}
+.btn-loading::after {
+  content: '';
+  width: 14px; height: 14px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: phx-spin .6s linear infinite;
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+@keyframes phx-spin { to { transform: rotate(360deg); } }
+
+/* ── Copy feedback ── */
+.copy-flash {
+  animation: phx-copy-flash .5s ease-out;
+}
+@keyframes phx-copy-flash {
+  0%   { background: rgba(25,200,185,.2); }
+  100% { background: transparent; }
+}
+
+/* ── Skeleton loading cards ── */
+.skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.skeleton-card {
+  background: var(--phx-bg-card);
+  border-radius: var(--phx-radius-base);
+  border: var(--phx-border-width) solid var(--phx-border-light);
+  padding: 16px;
+  overflow: hidden;
+}
+.skeleton-line {
+  height: 14px;
+  border-radius: 7px;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, var(--phx-border-light) 25%, #f0ebe0 50%, var(--phx-border-light) 75%);
+  background-size: 200% 100%;
+  animation: phx-shimmer 1.8s ease-in-out infinite;
+}
+.skeleton-line:first-child { width: 60%; height: 20px; }
+.skeleton-line:nth-child(2) { width: 40%; }
+.skeleton-line:nth-child(3) { width: 75%; }
+.skeleton-line:nth-child(4) { width: 50%; }
+.skeleton-avatar {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, var(--phx-border-light) 25%, #f0ebe0 50%, var(--phx-border-light) 75%);
+  background-size: 200% 100%;
+  animation: phx-shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── 底部双按钮（设置页底部） ── */
+.cs-row {
+  display: flex;
+  gap: 10px;
+  margin: 4px 0 8px;
+}
+.cs-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 16px;
+  border-radius: var(--phx-radius-base);
+  border: var(--phx-border-width) dashed var(--phx-border-light);
+  background: var(--phx-bg-card);
+  color: var(--phx-text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--phx-motion-base) ease, border-color var(--phx-motion-base) ease, color var(--phx-motion-base) ease, transform var(--phx-motion-base) ease;
+}
+.cs-link:active:not(:disabled) { transform: scale(.98); }
+.cs-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover, .btn-sm:hover { filter: brightness(1.06); }
+  .tab-strip button:hover { background: var(--phx-primary-bg); }
+  .nav-item:hover { background: var(--phx-primary-bg); }
+  .cs-link:hover:not(:disabled) {
+    border-style: solid;
+    border-color: var(--phx-primary);
+    color: var(--phx-primary);
+    background: var(--phx-primary-bg);
+  }
+}
+
+/* ── Keyboard focus ring (elegant + a11y) ── */
+.btn:focus-visible, .btn-sm:focus-visible,
+.bottom-nav-item:focus-visible, .nav-item:focus-visible,
+.tab-strip button:focus-visible, .capsule-switch button:focus-visible,
+.cs-link:focus-visible, .card-menu button:focus-visible {
+  outline: 2px solid var(--phx-primary);
+  outline-offset: 2px;
+}
+
+/* ── Tabular numerals for data values ── */
+.num {
+  font-variant-numeric: tabular-nums;
+}

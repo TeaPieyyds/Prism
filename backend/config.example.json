@@ -1,0 +1,16 @@
+{
+  "admin_email": "you@example.com",
+  "db_path": "phoenix.db",
+  "base_url": "http://localhost:8081",
+  "smtp_host": "smtp.example.com",
+  "smtp_port": 465,
+  "smtp_user": "you@example.com",
+  "smtp_pass": "YOUR_SMTP_PASSWORD",
+  "smtp_from": "you@example.com",
+  "pay_pid": "YOUR_PAY_PID",
+  "pay_key": "YOUR_PAY_KEY",
+  "pay_api_base": "https://your-pay-provider.example.com",
+  "pay_min_amount": 1,
+  "pay_nuts_rate": 10,
+  "pay_notify_url": ""
+}
