@@ -1,0 +1,334 @@
+/* ════════════════════════════════════════
+   Prism工具箱 — 首次启动向导样式
+   强制浅色主题，不受用户设置影响
+   ════════════════════════════════════════ */
+
+/* ── 向导覆盖层 ── */
+.wz-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; flex-direction: column;
+  background: #f8f8f0; color: #794f27;
+  font-family: 'Nunito','Noto Sans SC','PingFang SC',sans-serif;
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.wz-overlay * { box-sizing: border-box; }
+
+/* ── 背景多层系统 (L0-L3, 参考 poster-main) ── */
+.wz-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.wz-blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); transition: transform .8s cubic-bezier(.4,0,.2,1);
+}
+.wz-blob-gold {
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(212,138,14,.12) 0%, transparent 70%);
+  top: -150px; right: -100px;
+}
+.wz-blob-green {
+  width: 500px; height: 400px;
+  background: radial-gradient(ellipse, rgba(124,156,50,.09) 0%, transparent 70%);
+  top: 55%; left: -150px;
+}
+.wz-blob-brown {
+  width: 550px; height: 450px;
+  background: radial-gradient(circle, rgba(139,107,74,.08) 0%, transparent 70%);
+  bottom: 5%; right: -120px;
+}
+.wz-dots {
+  position: absolute; inset: 0; z-index: 1;
+  background-image: radial-gradient(circle, rgba(212,138,14,.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.wz-noise {
+  position: absolute; inset: 0; z-index: 1; opacity: .025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+.wz-lines {
+  position: absolute; inset: 0; z-index: 1; opacity: .02;
+  background: repeating-linear-gradient(-45deg,
+    transparent, transparent 30px, rgba(139,107,74,.5) 30px, rgba(139,107,74,.5) 31px
+  );
+}
+
+/* ── 页面容器 ── */
+.wz-content {
+  position: relative; z-index: 2;
+  flex: 1; display: flex; flex-direction: column;
+  padding: 24px;
+  padding-top: 4px;
+  overflow: hidden;
+}
+.wz-pages {
+  flex: 1; position: relative; overflow: hidden;
+}
+
+/* ── 单页 ── */
+.wz-page {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease, transform .35s cubic-bezier(.4,0,.2,1);
+  transform: translateX(40px);
+}
+.wz-page.pg-center { justify-content: center; }
+.wz-page-scroll { overflow-y: auto; }
+.wz-page.active {
+  opacity: 1; pointer-events: auto;
+  transform: translateX(0);
+}
+.wz-page.exit-left {
+  opacity: 0; transform: translateX(-40px);
+}
+
+/* ── 欢迎页特定 ── */
+.wz-hero {
+  text-align: center; margin-bottom: 32px;
+}
+.wz-hero-icon {
+  width: 72px; height: 72px; margin: 0 auto 16px;
+}
+.wz-hero h1 {
+  font-size: 32px; font-weight: 900;
+  letter-spacing: -.5px; color: #794f27;
+  margin: 0 0 4px;
+}
+.wz-hero .wz-sub {
+  font-size: 15px; color: #9f927d;
+  font-weight: 500; line-height: 1.6;
+  margin: 0 0 28px;
+}
+.wz-features {
+  width: 100%; max-width: 280px;
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 36px;
+}
+.wz-feat-row {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; font-weight: 600; color: #794f27;
+}
+.wz-feat-row svg {
+  width: 22px; height: 22px; flex-shrink: 0;
+  color: #d48a0e;
+}
+
+/* ── 表单区域 ── */
+.wz-form {
+  width: 100%; max-width: 320px;
+}
+.wz-label {
+  display: block; font-size: 12px; font-weight: 700;
+  color: #9f927d; margin-bottom: 4px;
+}
+.wz-label .wz-label-hint {
+  margin-left: 4px; vertical-align: middle; cursor: pointer;
+}
+.wz-label .wz-label-hint svg {
+  width: 14px; height: 14px; vertical-align: middle;
+  color: #c4b89e;
+}
+.wz-input-wrap {
+  position: relative; margin-bottom: 12px;
+}
+.wz-input {
+  width: 100%; height: 44px;
+  padding: 0 40px 0 14px;
+  border: 2px solid #e8e2d6; border-radius: 12px;
+  background: #fffcf4;
+  font-size: 14px; font-family: inherit; color: #794f27;
+  outline: none; transition: border-color .2s;
+}
+.wz-input:focus { border-color: #d48a0e; }
+.wz-input::-moz-placeholder { color: #c4b89e; }
+.wz-input::placeholder { color: #c4b89e; }
+.wz-input-tgl {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; padding: 4px;
+  color: #9f927d;
+}
+.wz-input-tgl svg { width: 20px; height: 20px; display: block; }
+
+/* ── 按钮 ── */
+.wz-btn {
+  width: 100%; height: 48px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: all .2s;
+}
+.wz-btn-primary {
+  background: #d48a0e; color: #fff;
+}
+.wz-btn-primary:active { background: #b8780b; transform: scale(.97); }
+.wz-btn-primary.loading { opacity: .7; pointer-events: none; }
+.wz-btn-primary svg { width: 18px; height: 18px; }
+.wz-btn-link {
+  background: none; color: #9f927d; font-size: 12px;
+  height: auto; padding: 4px; text-decoration: underline dotted;
+  display: inline; width: auto;
+}
+
+/* ── 顶栏（返回/跳过） ── */
+.wz-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 0 12px; flex-shrink: 0;
+}
+.wz-topbar button {
+  background: none; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  color: #9f927d; padding: 6px 4px;
+}
+.wz-topbar button:active { opacity: .6; }
+.wz-topbar svg { width: 20px; height: 20px; vertical-align: middle; }
+
+/* ── 区域标题 ── */
+.wz-section-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 800; color: #794f27;
+  margin-bottom: 16px;
+}
+.wz-section-title svg { width: 20px; height: 20px; color: #d48a0e; flex-shrink: 0; }
+
+/* ── 圆点导航 ── */
+.wz-dot-bar {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px 0 32px; flex-shrink: 0;
+}
+.wz-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #ddd6c8; transition: all .3s;
+  cursor: pointer;
+}
+.wz-dot.active { background: #d48a0e; width: 24px; border-radius: 4px; }
+.wz-dot:active { opacity: .7; }
+
+/* ── 验证状态 ── */
+.wz-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; margin: 8px 0 12px;
+}
+.wz-status svg { width: 18px; height: 18px; flex-shrink: 0; }
+.wz-status.ok { color: #6fba2c; }
+.wz-status.err { color: #e05a5a; }
+
+/* ── 成功后的账号区域 ── */
+.wz-acc-area {
+  width: 100%; max-width: 320px;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid #e8e2d6;
+}
+.wz-acc-btn {
+  width: 100%; height: 42px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: #fef7e6; border: 2px solid #fef7e6;
+  border-radius: 12px; cursor: pointer;
+  font-size: 13px; font-weight: 600; font-family: inherit; color: #d48a0e;
+  transition: all .2s;
+}
+.wz-acc-btn:active { border-color: #d48a0e; }
+.wz-acc-btn svg { width: 18px; height: 18px; }
+
+/* ── 导入默认参数（第3页） ── */
+.wz-params-scroll {
+  width: 100%; max-width: 320px;
+  overflow-y: auto; flex: 1; min-height: 0;
+  padding-right: 4px;
+}
+.wz-params-scroll::-webkit-scrollbar { width: 3px; }
+.wz-params-scroll::-webkit-scrollbar-thumb { background: #ddd6c8; border-radius: 2px; }
+.wz-param-group {
+  background: #fffcf4; border: 2px solid #e8e2d6;
+  border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+}
+.wz-param-group-title {
+  font-size: 12px; font-weight: 700; color: #9f927d;
+  margin-bottom: 10px;
+}
+.wz-param-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0;
+}
+.wz-param-row label { font-size: 13px; font-weight: 600; color: #794f27; }
+.wz-param-row input[type="number"] {
+  width: 90px; height: 32px; padding: 0 8px;
+  border: 2px solid #e8e2d6; border-radius: 8px;
+  background: #f8f8f0; font-size: 13px; color: #794f27;
+  outline: none; text-align: center;
+}
+.wz-param-row input[type="number"]:focus { border-color: #d48a0e; }
+
+/* ── 切换开关 (lbl-cb 风格) ── */
+.wz-toggle {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0; cursor: pointer;
+}
+.wz-toggle input { display: none; }
+.wz-toggle .wz-tgl-track {
+  width: 36px; height: 22px; border-radius: 11px;
+  background: #ddd6c8; position: relative; flex-shrink: 0;
+  transition: background .2s;
+}
+.wz-toggle .wz-tgl-track::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; transition: transform .2s;
+}
+.wz-toggle input:checked + .wz-tgl-track { background: #d48a0e; }
+.wz-toggle input:checked + .wz-tgl-track::after { transform: translateX(14px); }
+.wz-toggle .wz-tgl-label { font-size: 13px; font-weight: 600; color: #794f27; }
+.wz-toggle-sub {
+  padding-left: 46px; margin-top: -2px; margin-bottom: 4px;
+}
+.wz-toggle-sub .wz-toggle .wz-tgl-label { font-size: 12px; color: #9f927d; }
+
+/* ── 完成页 ── */
+.wz-done-check {
+  width: 72px; height: 72px; margin: 0 auto 20px;
+}
+.wz-done-check svg { width: 100%; height: 100%; display: block; }
+.wz-done-check.anim {
+  animation: wz-check-bounce .6s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes wz-check-bounce {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.wz-done-title {
+  font-size: 24px; font-weight: 900; color: #794f27;
+  margin: 0 0 8px;
+}
+.wz-done-sub {
+  font-size: 14px; color: #9f927d;
+  margin: 0 0 36px; text-align: center; line-height: 1.6;
+}
+
+/* ── 弹窗说明 ── */
+.wz-modal {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,.4); display: flex;
+  align-items: flex-end; justify-content: center;
+  animation: wz-modal-in .25s ease;
+}
+@keyframes wz-modal-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.wz-modal-box {
+  width: 100%; max-width: 400px;
+  background: #fffcf4; border-radius: 20px 20px 0 0;
+  padding: 24px 20px 32px;
+}
+.wz-modal-title {
+  font-size: 15px; font-weight: 800; color: #794f27;
+  margin-bottom: 12px;
+}
+.wz-modal-body {
+  font-size: 13px; line-height: 1.7; color: #9f927d;
+}
+.wz-modal-body ol { padding-left: 20px; margin: 8px 0; }
+.wz-modal-body li { margin: 6px 0; }

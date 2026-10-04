@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 深色背景 -->
+    <item android:drawable="@color/splash_bg" />
+    <!-- 居中 Logo -->
+    <item>
+        <bitmap
+            android:src="@drawable/splash_logo"
+            android:gravity="center"
+            android:antialias="true" />
+    </item>
+</layer-list>

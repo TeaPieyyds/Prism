@@ -1,0 +1,31 @@
+# Android build artifacts
+android/.gradle/
+android/app/build/
+android/app/src/main/jniLibs/arm64-v8a/libprism.so
+android/app/src/main/jniLibs/armeabi-v7a/
+
+# Go build artifacts
+bot-apk
+prism-toolbox
+prism-toolbox-new
+prism-server
+
+# APK files (root level)
+prism工具箱_*.apk
+prism工具箱_*.apk.idsig
+android/prism*.apk
+android/prism*.apk.idsig
+
+# Test binaries
+*.test
+
+# Poster and media build
+poster-assets/
+render-*.mjs
+poster-*.html
+poster-*.png
+
+# Temp files
+*.tmp
+*.swp
+debug.keystore

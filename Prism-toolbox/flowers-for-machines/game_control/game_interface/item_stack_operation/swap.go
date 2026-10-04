@@ -1,0 +1,42 @@
+package item_stack_operation
+
+import (
+	"github.com/OmineDev/flowers-for-machines/core/minecraft/protocol"
+	"github.com/OmineDev/flowers-for-machines/game_control/resources_control"
+)
+
+// Swap 指示物品交换操作
+type Swap struct {
+	Source      resources_control.SlotLocation
+	Destination resources_control.SlotLocation
+}
+
+func (Swap) ID() uint8 {
+	return IDItemStackOperationSwap
+}
+
+func (Swap) CanInline() bool {
+	return true
+}
+
+func (s Swap) Make(runtimeData MakingRuntime) []protocol.StackRequestAction {
+	data := runtimeData.(SwapRuntime)
+	return []protocol.StackRequestAction{
+		&protocol.SwapStackRequestAction{
+			Source: protocol.StackRequestSlotInfo{
+				Container: protocol.FullContainerName{
+					ContainerID: data.SwapSrcContainerID,
+				},
+				Slot:           byte(s.Source.SlotID),
+				StackNetworkID: data.SwapSrcStackNetworkID,
+			},
+			Destination: protocol.StackRequestSlotInfo{
+				Container: protocol.FullContainerName{
+					ContainerID: data.SwapDstContainerID,
+				},
+				Slot:           byte(s.Destination.SlotID),
+				StackNetworkID: data.SwapDstStackNetworkID,
+			},
+		},
+	}
+}

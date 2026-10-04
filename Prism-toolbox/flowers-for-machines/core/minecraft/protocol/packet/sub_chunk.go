@@ -1,0 +1,38 @@
+package packet
+
+import (
+	"github.com/OmineDev/flowers-for-machines/core/minecraft/protocol"
+)
+
+// SubChunk sends data about multiple sub-chunks around a center point.
+type SubChunk struct {
+	// CacheEnabled is whether the sub-chunk caching is enabled or not.
+	CacheEnabled bool
+	// Dimension is the dimension the sub-chunks are in.
+	Dimension int32
+	// Position is an absolute sub-chunk center point that every SubChunkRequest uses as a reference.
+	Position protocol.SubChunkPos
+	// SubChunkEntries contains sub-chunk entries relative to the center point.
+	SubChunkEntries []protocol.SubChunkEntry
+	// BlockEntities contains the trailing NBT block entity data after all sub-chunk entries.
+	// This data is only present when the server sends block entities in the SubChunk response.
+	BlockEntities []byte
+}
+
+// ID ...
+func (*SubChunk) ID() uint32 {
+	return IDSubChunk
+}
+
+func (pk *SubChunk) Marshal(io protocol.IO) {
+	io.Bool(&pk.CacheEnabled)
+	io.Varint32(&pk.Dimension)
+	io.SubChunkPos(&pk.Position)
+	if pk.CacheEnabled {
+		protocol.SliceUint32Length(io, &pk.SubChunkEntries)
+	} else {
+		protocol.FuncIOSliceUint32Length(io, &pk.SubChunkEntries, protocol.SubChunkEntryNoCache)
+	}
+	// 读取末尾的 NBT 方块实体数据（服务器 → 客户端）
+	io.Bytes(&pk.BlockEntities)
+}
